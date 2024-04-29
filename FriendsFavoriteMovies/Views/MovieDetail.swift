@@ -25,7 +25,7 @@ struct MovieDetail: View {
             
             DatePicker("Release date", selection: $movie.releaseDate, displayedComponents: .date)
         }
-        .navigationTitle("Movie")
+        .navigationTitle(isNew ? "New Movie" : "Movie")
         .toolbar {
             if isNew {
                 ToolbarItem(placement: .confirmationAction) {
@@ -55,6 +55,7 @@ struct MovieDetail: View {
 #Preview("New Movie") {
     NavigationStack {
         MovieDetail(movie: SampleData.shared.movie, isNew: true)
+            .navigationBarTitleDisplayMode(.inline)
     }
     .modelContainer(SampleData.shared.modelContainer)
 }

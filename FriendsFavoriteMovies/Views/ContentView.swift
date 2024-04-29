@@ -13,18 +13,26 @@ struct ContentView: View {
     @Query(sort: \Movie.title) private var movies: [Movie]
     
     @State private var newMovie: Movie?
-
+    
     var body: some View {
         NavigationSplitView {
-            List {
-                ForEach(movies) { movie in
-                    NavigationLink {
-                        MovieDetail(movie: movie)
-                    } label: {
-                        Text(movie.title)
+            Group {
+                if !movies.isEmpty {
+                    List {
+                        ForEach(movies) { movie in
+                            NavigationLink {
+                                MovieDetail(movie: movie)
+                            } label: {
+                                Text(movie.title)
+                            }
+                        }
+                        .onDelete(perform: deleteItems)
+                    }
+                } else {
+                    ContentUnavailableView {
+                        Label("No Movies", systemImage: "film.stack")
                     }
                 }
-                .onDelete(perform: deleteItems)
             }
             .navigationTitle("Movies")
             .toolbar {
@@ -48,7 +56,7 @@ struct ContentView: View {
                 .navigationTitle("Movie")
         }
     }
-
+    
     private func addMovie() {
         withAnimation {
             let newItem = Movie(title: "", releaseDate: .now)
@@ -57,7 +65,7 @@ struct ContentView: View {
             newMovie = newItem
         }
     }
-
+    
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
@@ -70,4 +78,9 @@ struct ContentView: View {
 #Preview {
     ContentView()
         .modelContainer(SampleData.shared.modelContainer)
+}
+
+#Preview("Empty List") {
+    ContentView()
+        .modelContainer(for: Movie.self, inMemory: true)
 }
