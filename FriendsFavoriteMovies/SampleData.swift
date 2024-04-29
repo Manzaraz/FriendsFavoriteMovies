@@ -45,4 +45,8 @@ class SampleData {
         }
     }
     
+    var movie: Movie {
+        Movie.sampleData[0]
+    }
+    
 }
