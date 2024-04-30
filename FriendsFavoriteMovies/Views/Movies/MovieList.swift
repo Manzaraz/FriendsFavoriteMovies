@@ -10,9 +10,17 @@ import SwiftData
 
 struct MovieList: View {
     @Environment(\.modelContext) private var modelContext
-    @Query(sort: \Movie.title) private var movies: [Movie]
+    @Query private var movies: [Movie]
     
     @State private var newMovie: Movie?
+    
+    init(titleFilter: String = "") {
+        let predicate = #Predicate<Movie> { movie in
+            titleFilter.isEmpty || movie.title.localizedStandardContains(titleFilter)
+        }
+        
+        _movies = Query(filter: predicate, sort: \Movie.title)
+    }
     
     var body: some View {
         NavigationSplitView {
@@ -82,5 +90,10 @@ struct MovieList: View {
 
 #Preview("Empty List") {
     MovieList()
+        .modelContainer(for: Movie.self, inMemory: true)
+}
+
+#Preview("Filtered") {
+    MovieList(titleFilter: "tr")
         .modelContainer(for: Movie.self, inMemory: true)
 }
