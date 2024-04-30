@@ -49,7 +49,7 @@ struct FriendList: View {
             }
             .sheet(item: $newFriend) { friend in
                 NavigationStack {
-                    Text("New Friend")
+                    FriendDetail(friend: friend, isNew: true)
                 }
                 .interactiveDismissDisabled()
             }
